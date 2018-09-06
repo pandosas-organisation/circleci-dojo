@@ -1,0 +1,81 @@
+version: 2
+defaults: &defaults
+  docker:
+    - image: jtredoux/node-aws:8.10
+
+save-cache-node-modules: &save-cache-node-modules
+  key: node-modules-{{ checksum "package.json" }}
+  paths: [./node_modules, yarn.lock]
+restore-cache-node-modules: &restore-cache-node-modules
+  key: node-modules-{{ checksum "package.json" }}
+
+jobs:
+  install:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore-cache-node-modules
+      - attach_workspace:
+          at: .
+      - run: npm i -g yarn
+      - run:
+          name: Install dependencies
+          command: yarn
+      - save_cache: *save-cache-node-modules
+
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache: *restore-cache-node-modules
+      - run:
+          name: Lint
+          command: yarn run lint
+
+  tests:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache: *restore-cache-node-modules
+      - run:
+          name: Tests
+          command: yarn run test
+  upload-to-heroku:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore-cache-node-modules
+workflows:
+  version: 2
+  feature_branches:
+    jobs:
+      - install:
+          filters:
+            branches:
+              ignore: master
+      - lint:
+          requires:
+            - install
+      - tests:
+          requires:
+            - lint
+  release_branches:
+    jobs:
+      - install:
+          filters:
+            branches:
+              only: master
+      - lint:
+          requires:
+            - install
+      - tests:
+          requires:
+            - install
+      - upload-to-heroku:
+          requires:
+            - lint
+            - test
