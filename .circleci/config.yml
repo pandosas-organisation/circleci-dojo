@@ -81,4 +81,4 @@ workflows:
       - upload-to-heroku:
           requires:
             - lint
-            - test
+            - tests
