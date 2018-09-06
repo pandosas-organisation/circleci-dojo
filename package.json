@@ -1,0 +1,24 @@
+{
+  "name": "circleci",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "test": "echo \"no test\"",
+    "lint": "echo \"no lint\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://MindaugasDukauskas@github.com/MindaugasDukauskas/circleci-dojo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MindaugasDukauskas/circleci-dojo/issues"
+  },
+  "homepage": "https://github.com/MindaugasDukauskas/circleci-dojo#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
