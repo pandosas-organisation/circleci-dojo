@@ -1,2 +1,6 @@
-/node_modules/
-yarn.lock
+**/.vscode
+**/package-lock.json
+**/yarn.lock
+**/launch.json
+**/yarn-error.log
+**/node_modules/
